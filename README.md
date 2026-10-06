@@ -11,22 +11,7 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 
 ## Architecture (Phase 1)
 
-```mermaid
-flowchart LR
-    U[User / Browser] -->|HTTP| ALB[AWS Application Load Balancer]
-    subgraph AWS["AWS (us-east-1)"]
-      ALB --> ING[Kubernetes Ingress]
-      subgraph EKS["EKS cluster: demo-cluster"]
-        LBC[AWS Load Balancer Controller<br/>kube-system] -. creates and manages .-> ALB
-        ING --> SVC[Service: service-2048]
-        SVC --> P1[Pod]
-        SVC --> P2[Pod]
-        SVC --> P3[Pod]
-      end
-      FG[Fargate profile<br/>namespace: game-2048] -. runs .-> P1
-      IAM[IAM OIDC provider +<br/>IRSA role] -. permissions .-> LBC
-    end
-```
+![Phase 1 architecture](docs/images/architecture-phase1.png)
 
 **How it works**
 
@@ -58,7 +43,7 @@ flowchart LR
 │   ├── 04-alb-controller.md
 │   ├── 05-deploy-2048-app.md
 │   ├── troubleshooting.md
-│   └── images/            # screenshots of my own deployment
+│   └── images/            # architecture diagram and screenshots
 ├── manifests/
 │   └── sample-app/        # nginx Deployment and Service used for a first test
 └── scripts/
