@@ -4,8 +4,8 @@ Hands-on project to build a production-style Kubernetes platform on **Amazon EKS
 from a first cluster with an AWS Application Load Balancer, to a 12-component microservices
 application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and monitoring.
 
-> **Status:** Phase 1 (EKS + Ingress) and Phase 2 (Terraform foundations) completed.
-> Phases 3-4 are in progress — see the [roadmap](#roadmap).
+> **Status:** Phase 1 completed (EKS on Fargate + AWS Load Balancer Controller + Ingress).
+> Phases 2-4 are in progress — see the [roadmap](#roadmap).
 
 ---
 
@@ -26,8 +26,7 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 
 | Area | Phase 1 (done) | Next phases |
 |---|---|---|
-| Cloud | AWS EKS, Fargate, IAM, VPC | EKS provisioned with Terraform |
-| Infrastructure as Code | Terraform: VPC, ALB, EC2, S3 (Phase 2) | Terraform EKS module |
+| Cloud | AWS EKS, Fargate, IAM, VPC | Terraform-provisioned VPC, IAM and EKS |
 | Kubernetes | Deployment, Service, Ingress, IRSA | HPA, namespaces per component |
 | Packaging / delivery | Helm (controller), kubectl | Helm charts + ArgoCD (GitOps) |
 | Observability | – | Prometheus, Grafana |
@@ -47,9 +46,8 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 │   └── images/            # architecture diagram and screenshots
 ├── manifests/
 │   └── sample-app/        # nginx Deployment and Service used for a first test
-├── scripts/
-│   └── cleanup.sh         # deletes all Phase 1 resources to avoid AWS costs
-└── phase2-terraform/      # VPC, subnets, ALB, EC2 and S3 with Terraform
+└── scripts/
+    └── cleanup.sh         # deletes all resources to avoid AWS costs
 ```
 
 ## Quick start
@@ -94,9 +92,9 @@ An EKS cluster and an ALB are billed per hour. Delete everything when you are do
 ## Roadmap
 
 - [x] **Phase 1:** EKS on Fargate, IRSA, AWS Load Balancer Controller, Ingress
-- [x] **Phase 2:** [AWS foundations with **Terraform**](phase2-terraform/): VPC, multi-AZ subnets, ALB, EC2, S3 (refactored with `for_each`, least-privilege security groups, IMDSv2)
-- [ ] **Phase 3:** Provision the EKS cluster with Terraform and deploy a 12-component e-commerce app (8 microservices, MongoDB, MySQL, RabbitMQ, Redis) with **Helm**
-- [ ] **Phase 4:** GitOps delivery with **ArgoCD**, **HPA** autoscaling and **Prometheus/Grafana** monitoring
+- [ ] **Phase 2:** Provision VPC, IAM and EKS with **Terraform** (remote state, reusable modules)
+- [ ] **Phase 3:** Deploy a 12-component e-commerce app (8 microservices, MongoDB, MySQL, RabbitMQ, Redis) with **Helm** and **ArgoCD**
+- [ ] **Phase 4:** **HPA** autoscaling and **Prometheus/Grafana** monitoring
 
 ## What I learned
 

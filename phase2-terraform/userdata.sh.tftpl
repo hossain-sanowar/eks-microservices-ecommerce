@@ -1,0 +1,35 @@
+#!/bin/bash
+set -euo pipefail
+
+apt-get update -y
+apt-get install -y apache2
+
+# IMDSv2: request a session token first, then read the metadata
+TOKEN=$(curl -s -X PUT "http://169.254.169.254/latest/api/token" \
+  -H "X-aws-ec2-metadata-token-ttl-seconds: 300")
+INSTANCE_ID=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/instance-id)
+AZ=$(curl -s -H "X-aws-ec2-metadata-token: $TOKEN" \
+  http://169.254.169.254/latest/meta-data/placement/availability-zone)
+
+cat > /var/www/html/index.html <<HTML
+<!DOCTYPE html>
+<html>
+<head><title>${server_name}</title>
+<style>
+  body { font-family: sans-serif; background: #f7fafb; color: #1b375a; text-align: center; padding-top: 80px; }
+  .card { display: inline-block; background: #fff; border: 2px solid #00a0ae; border-radius: 12px; padding: 32px 48px; }
+  .id { color: #00a0ae; font-family: monospace; }
+</style></head>
+<body>
+  <div class="card">
+    <h1>${server_name}</h1>
+    <p>Instance ID: <span class="id">$INSTANCE_ID</span></p>
+    <p>Availability zone: <span class="id">$AZ</span></p>
+    <p>Served through an AWS Application Load Balancer, provisioned with Terraform.</p>
+  </div>
+</body>
+</html>
+HTML
+
+systemctl enable --now apache2
