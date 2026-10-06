@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: robot-shop
+  labels:
+    # Pod Security Standards (the replacement for the removed PodSecurityPolicy):
+    # block privileged pods, and warn about anything that is not "restricted"
+    pod-security.kubernetes.io/enforce: baseline
+    pod-security.kubernetes.io/warn: restricted
+    pod-security.kubernetes.io/audit: restricted

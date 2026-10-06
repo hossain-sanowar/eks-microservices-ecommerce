@@ -1,0 +1,10 @@
+This chart is a modified version of the Stan's Robot Shop Helm chart
+(https://github.com/instana/robot-shop), licensed under the Apache License 2.0.
+
+Modifications by Md Sanowar Hossain (2026):
+- Chart converted to apiVersion v2 and image tag pinned to 2.1.0
+- PodSecurityPolicy, ClusterRole, ClusterRoleBinding and ServiceAccount templates removed (PSP removed in Kubernetes 1.25)
+- web Service changed to ClusterIP; ALB Ingress template added (ingressClassName: alb)
+- Redis StorageClass and image made configurable (was hard-coded to gp2)
+- NET_ADMIN capability removed from the MySQL container
+- OpenShift and NodePort options removed

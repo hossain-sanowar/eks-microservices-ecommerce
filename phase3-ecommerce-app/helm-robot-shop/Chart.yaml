@@ -1,0 +1,9 @@
+apiVersion: v2
+name: robot-shop
+description: Stan's Robot Shop (12-component microservices demo), adapted for AWS EKS with an ALB Ingress and EBS gp3 storage
+type: application
+version: 1.2.0
+appVersion: "2.1.0"
+home: https://github.com/hossain-sanowar/eks-microservices-ecommerce
+sources:
+  - https://github.com/instana/robot-shop

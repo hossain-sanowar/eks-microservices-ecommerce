@@ -4,8 +4,7 @@ Hands-on project to build a production-style Kubernetes platform on **Amazon EKS
 from a first cluster with an AWS Application Load Balancer, to a 12-component microservices
 application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and monitoring.
 
-> **Status:** Phase 1 (EKS + Ingress), Phase 2 (Terraform) and Phase 4 (multi-cluster GitOps) completed.
-> Phase 3 (e-commerce app) is in progress — see the [roadmap](#roadmap).
+> **Status:** Phases 1-4 completed. Phase 5 (GitOps delivery of the shop with autoscaling and monitoring) is next — see the [roadmap](#roadmap).
 
 ---
 
@@ -26,10 +25,10 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 
 | Area | Phase 1 (done) | Next phases |
 |---|---|---|
-| Cloud | AWS EKS, Fargate, IAM, VPC | EKS provisioned with Terraform |
-| Infrastructure as Code | Terraform: VPC, ALB, EC2, S3 (Phase 2) | Terraform EKS module |
-| Kubernetes | Deployment, Service, Ingress, IRSA | HPA, namespaces per component |
-| Packaging / delivery | Helm (controller), kubectl, Argo CD ApplicationSet (Phase 4) | Helm charts for the e-commerce app |
+| Cloud | AWS EKS (Fargate and managed node groups), IAM, VPC, EBS | – |
+| Infrastructure as Code | Terraform: VPC, ALB, EC2, S3 (Phase 2); VPC, EKS, IRSA (Phase 3) | – |
+| Kubernetes | Deployment, StatefulSet, Service, Ingress, IRSA, Pod Security Standards | HPA |
+| Packaging / delivery | Helm chart for the shop (Phase 3), Argo CD ApplicationSet (Phase 4) | Argo CD delivering the shop |
 | Observability | – | Prometheus, Grafana |
 
 ## Repository structure
@@ -50,6 +49,7 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 ├── scripts/
 │   └── cleanup.sh         # deletes all Phase 1 resources to avoid AWS costs
 ├── phase2-terraform/      # VPC, subnets, ALB, EC2 and S3 with Terraform
+├── phase3-ecommerce-app/  # EKS with Terraform + 12-component shop with Helm
 └── phase4-gitops-argocd/  # Argo CD hub cluster deploying to 2 spoke clusters
 ```
 
@@ -96,7 +96,7 @@ An EKS cluster and an ALB are billed per hour. Delete everything when you are do
 
 - [x] **Phase 1:** EKS on Fargate, IRSA, AWS Load Balancer Controller, Ingress
 - [x] **Phase 2:** [AWS foundations with **Terraform**](phase2-terraform/): VPC, multi-AZ subnets, ALB, EC2, S3 (refactored with `for_each`, least-privilege security groups, IMDSv2)
-- [ ] **Phase 3:** Provision the EKS cluster with Terraform and deploy a 12-component e-commerce app (8 microservices, MongoDB, MySQL, RabbitMQ, Redis) with **Helm**
+- [x] **Phase 3:** [EKS with **Terraform** + 12-component shop with **Helm**](phase3-ecommerce-app/): VPC, EKS, IRSA roles, EBS CSI (gp3), ALB Ingress, 8 microservices with MongoDB, MySQL, Redis and RabbitMQ
 - [x] **Phase 4:** [Multi-cluster GitOps with **Argo CD**](phase4-gitops-argocd/): hub-and-spoke EKS, ApplicationSet, AppProject, automated sync with self-heal
 - [ ] **Phase 5:** Deliver the e-commerce app through Argo CD, with **HPA** autoscaling and **Prometheus/Grafana** monitoring
 

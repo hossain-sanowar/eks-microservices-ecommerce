@@ -1,0 +1,54 @@
+# Images from Docker Hub (robotshop/rs-*), pinned instead of "latest"
+image:
+  repo: robotshop
+  version: "2.1.0"
+  pullPolicy: IfNotPresent
+
+# Instana end-user monitoring (optional, not used in this project)
+eum:
+  key: null
+  url: https://eum-eu-west-1.instana.io
+
+# Internet-facing AWS Application Load Balancer (needs the AWS Load Balancer Controller)
+ingress:
+  enabled: true
+  className: alb
+
+######################################
+# Per-workload scheduling options:
+# <workload>:
+#   affinity: {}
+#   nodeSelector: {}
+#   tolerations: []
+######################################
+
+cart: {}
+
+catalogue: {}
+
+dispatch: {}
+
+mongodb: {}
+
+mysql: {}
+
+payment:
+  # Alternative payment gateway URL (default https://www.paypal.com)
+  gateway: null
+
+rabbitmq: {}
+
+ratings: {}
+
+redis:
+  image: redis:4.0.6
+  # gp3 StorageClass backed by the EBS CSI driver (see k8s/storageclass-gp3.yaml)
+  storageClassName: gp3
+
+shipping: {}
+
+user: {}
+
+web:
+  # ClusterIP behind the ALB Ingress; set to LoadBalancer only for testing without Ingress
+  serviceType: ClusterIP
