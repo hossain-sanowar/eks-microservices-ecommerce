@@ -1,0 +1,32 @@
+# One ApplicationSet creates one Argo CD Application per spoke cluster.
+# Every cluster registered in Argo CD with the label env=spoke gets the guestbook app.
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: guestbook
+  namespace: argocd
+spec:
+  goTemplate: true
+  generators:
+    - clusters:
+        selector:
+          matchLabels:
+            env: spoke
+  template:
+    metadata:
+      name: "guestbook-{{.name}}"
+    spec:
+      project: gitops-demo
+      source:
+        repoURL: https://github.com/hossain-sanowar/eks-microservices-ecommerce.git
+        targetRevision: main
+        path: phase4-gitops-argocd/apps/guestbook
+      destination:
+        server: "{{.server}}"
+        namespace: guestbook
+      syncPolicy:
+        automated:
+          prune: true      # delete resources that were removed from Git
+          selfHeal: true   # undo manual changes made with kubectl
+        syncOptions:
+          - CreateNamespace=true

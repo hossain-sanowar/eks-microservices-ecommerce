@@ -4,8 +4,8 @@ Hands-on project to build a production-style Kubernetes platform on **Amazon EKS
 from a first cluster with an AWS Application Load Balancer, to a 12-component microservices
 application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and monitoring.
 
-> **Status:** Phase 1 (EKS + Ingress) and Phase 2 (Terraform foundations) completed.
-> Phases 3-4 are in progress — see the [roadmap](#roadmap).
+> **Status:** Phase 1 (EKS + Ingress), Phase 2 (Terraform) and Phase 4 (multi-cluster GitOps) completed.
+> Phase 3 (e-commerce app) is in progress — see the [roadmap](#roadmap).
 
 ---
 
@@ -29,7 +29,7 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 | Cloud | AWS EKS, Fargate, IAM, VPC | EKS provisioned with Terraform |
 | Infrastructure as Code | Terraform: VPC, ALB, EC2, S3 (Phase 2) | Terraform EKS module |
 | Kubernetes | Deployment, Service, Ingress, IRSA | HPA, namespaces per component |
-| Packaging / delivery | Helm (controller), kubectl | Helm charts + ArgoCD (GitOps) |
+| Packaging / delivery | Helm (controller), kubectl, Argo CD ApplicationSet (Phase 4) | Helm charts for the e-commerce app |
 | Observability | – | Prometheus, Grafana |
 
 ## Repository structure
@@ -49,7 +49,8 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
 │   └── sample-app/        # nginx Deployment and Service used for a first test
 ├── scripts/
 │   └── cleanup.sh         # deletes all Phase 1 resources to avoid AWS costs
-└── phase2-terraform/      # VPC, subnets, ALB, EC2 and S3 with Terraform
+├── phase2-terraform/      # VPC, subnets, ALB, EC2 and S3 with Terraform
+└── phase4-gitops-argocd/  # Argo CD hub cluster deploying to 2 spoke clusters
 ```
 
 ## Quick start
@@ -96,7 +97,8 @@ An EKS cluster and an ALB are billed per hour. Delete everything when you are do
 - [x] **Phase 1:** EKS on Fargate, IRSA, AWS Load Balancer Controller, Ingress
 - [x] **Phase 2:** [AWS foundations with **Terraform**](phase2-terraform/): VPC, multi-AZ subnets, ALB, EC2, S3 (refactored with `for_each`, least-privilege security groups, IMDSv2)
 - [ ] **Phase 3:** Provision the EKS cluster with Terraform and deploy a 12-component e-commerce app (8 microservices, MongoDB, MySQL, RabbitMQ, Redis) with **Helm**
-- [ ] **Phase 4:** GitOps delivery with **ArgoCD**, **HPA** autoscaling and **Prometheus/Grafana** monitoring
+- [x] **Phase 4:** [Multi-cluster GitOps with **Argo CD**](phase4-gitops-argocd/): hub-and-spoke EKS, ApplicationSet, AppProject, automated sync with self-heal
+- [ ] **Phase 5:** Deliver the e-commerce app through Argo CD, with **HPA** autoscaling and **Prometheus/Grafana** monitoring
 
 ## What I learned
 

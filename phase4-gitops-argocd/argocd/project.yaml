@@ -1,0 +1,23 @@
+# Restricts what the demo apps may deploy: only this repo, only the guestbook namespace.
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: gitops-demo
+  namespace: argocd
+spec:
+  description: Guestbook demo deployed to all spoke clusters
+  sourceRepos:
+    - https://github.com/hossain-sanowar/eks-microservices-ecommerce.git
+  destinations:
+    - server: "*"
+      namespace: guestbook
+  clusterResourceWhitelist:
+    - group: ""
+      kind: Namespace
+  namespaceResourceWhitelist:
+    - group: ""
+      kind: Service
+    - group: ""
+      kind: ConfigMap
+    - group: apps
+      kind: Deployment
