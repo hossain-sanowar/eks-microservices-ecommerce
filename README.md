@@ -20,6 +20,7 @@ application deployed with **Terraform, Helm and ArgoCD**, with autoscaling and m
    AWS Load Balancer Controller gets AWS permissions through a Kubernetes service account instead of static keys.
 4. The **AWS Load Balancer Controller** (installed with Helm) watches Ingress objects and
    provisions an internet-facing **Application Load Balancer** automatically.
+5. Argo CD delivery of the shop with HPA autoscaling and Prometheus/Grafana monitoring.
 
 ## Tech stack
 
